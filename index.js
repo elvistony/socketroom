@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: ['http://localhost', 'https://elvistony.dev', /\.elvistony\.dev$/],
+    origin: ['http://localhost:5500', 'https://elvistony.dev', /\.elvistony\.dev$/],
     methods: ['GET', 'POST']
   }
 });
