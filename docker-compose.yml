@@ -1,0 +1,13 @@
+version: '3'
+services:
+  myapp:
+    image: node:16
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: "npm start"
+    ports:
+      - "5800:5800"
+    environment:
+      - NODE_ENV=production
+    restart: always
