@@ -1,0 +1,25 @@
+{
+  "name": "socketroom",
+  "version": "1.0.0",
+  "description": "A Socket IO room to broadcast messages (client and server)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elvistony/socketroom.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elvistony/socketroom/issues"
+  },
+  "homepage": "https://github.com/elvistony/socketroom#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "socket.io": "^4.8.0"
+  }
+}
