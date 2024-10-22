@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io("https://socket.elvistony.dev");
 
 // Join a room
 function joinRoom() {

@@ -17,30 +17,46 @@ app.use(express.static('public'));
 
 // Handle socket connections
 io.on('connection', (socket) => {
-  console.log('A user connected');
+    console.log('A user connected');
 
-  // Handle joining a room
-  socket.on('joinRoom', (roomId) => {
-    socket.join(roomId);
-    console.log(`User joined room: ${roomId}`);
-  });
+    // Handle joining a room
+    socket.on('joinRoom', (roomId) => {
+        socket.join(roomId);
+        console.log(`Client ${clientId} joined room: ${roomId}`);
 
-  // Handle sending messages
-  socket.on('message', ({ roomId, message }) => {
-    io.to(roomId).emit('message', message);  // Broadcast message to the room
-  });
+        // Notify other clients in the room
+        socket.to(roomId).emit('message', {
+            clientId: 'system',
+            message: `Client ${clientId} has joined the room.`,
+            roomId
+        });
+    });
 
-  // Handle 'peers' event to return the number of peers in the room
-  socket.on('peers', (roomId) => {
-    const room = io.sockets.adapter.rooms[roomId];
-    const numPeers = room ? room.size : 0;  // Check if the room exists and count peers
-    socket.emit('peers', numPeers);  // Send back the number of peers to the requesting client
-  });
+    // Handle sending messages
+    socket.on('message', (data) => {
+        const { roomId, message } = data;
 
-  // Handle disconnect
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
+        // Broadcast the message to all clients in the room
+        io.to(roomId).emit('message', {
+            clientId: clients[socket.id], // Get the client ID from the mapping
+            message,
+            roomId
+        });
+
+        console.log(`Message from ${clients[socket.id]} in room ${roomId}: ${message}`);
+    });
+
+    // Handle 'peers' event to return the number of peers in the room
+    socket.on('peers', (roomId) => {
+        const room = io.sockets.adapter.rooms[roomId];
+        const numPeers = room ? room.size : 0;  // Check if the room exists and count peers
+        socket.emit('peers', numPeers);  // Send back the number of peers to the requesting client
+    });
+
+    // Handle disconnect
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
 });
 
 // Start the server
